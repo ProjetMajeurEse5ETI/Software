@@ -142,18 +142,18 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-int i = 0;
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	verityTable();/*if(i == 0){
-		HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);
-		i++;
+	GPIO_PinState rotation = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_6);
+	if(rotation == GPIO_PIN_SET)
+	{
+		verityTableHoraire();
 	}
-	else{
-		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-		i = 0;
-	}*/
+	else
+	{
+		verityTableHoraireAntiHoraire();
+	}
 }
 
 

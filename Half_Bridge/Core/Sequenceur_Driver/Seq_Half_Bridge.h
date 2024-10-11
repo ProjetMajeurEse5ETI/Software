@@ -10,7 +10,13 @@
 
 #include "stm32f3xx_hal.h"
 #include "main.h"
+
 void resetOutput(void);
-void verityTable(void);
+void verityTableHoraire(void);
+void verityTableHoraireAntiHoraire(void);
+
+
+
+
 
 #endif /* SEQUENCEUR_DRIVER_SEQ_HALF_BRIDGE_H_ */

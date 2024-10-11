@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (9-2020-q2-update)
+# Toolchain: GNU Tools for STM32 (10.3-2021.10)
 ################################################################################
 
 -include ../makefile.init
@@ -44,14 +44,14 @@ BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ART
 EXECUTABLES += \
 Half_Bridge.elf \
 
+MAP_FILES += \
+Half_Bridge.map \
+
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
 Half_Bridge.list \
-
-OBJCOPY_BIN += \
-Half_Bridge.bin \
 
 
 # All Target
@@ -61,8 +61,8 @@ all: main-build
 main-build: Half_Bridge.elf secondary-outputs
 
 # Tool invocations
-Half_Bridge.elf: $(OBJS) $(USER_OBJS) C:\Users\augustin.laprais\STM32CubeIDE\workspace_1.5.1\Half_Bridge\STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Half_Bridge.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\augustin.laprais\STM32CubeIDE\workspace_1.5.1\Half_Bridge\STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Half_Bridge.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Half_Bridge.elf Half_Bridge.map: $(OBJS) $(USER_OBJS) C:\Users\anico\Desktop\Ecole\5a\Projet\ Majeur\Software\Half_Bridge\STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Half_Bridge.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\anico\Desktop\Ecole\5a\Projet Majeur\Software\Half_Bridge\STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Half_Bridge.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -76,17 +76,12 @@ Half_Bridge.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Half_Bridge.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "Half_Bridge.bin"
-	@echo 'Finished building: $@'
-	@echo ' '
-
 # Other Targets
 clean:
-	-$(RM) Half_Bridge.bin Half_Bridge.elf Half_Bridge.list default.size.stdout
+	-$(RM) Half_Bridge.elf Half_Bridge.list Half_Bridge.map default.size.stdout
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'
