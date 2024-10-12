@@ -44,7 +44,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+//Initalize Hall sensor for verityTable
+int oldHallSensor = 7;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -143,26 +144,16 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-int i = 0;
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	//GPIO_PinState rotation = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_6);
-	//if(rotation == GPIO_PIN_RESET)
-	//{
-	/*if (i == 0) {
-		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_SET);
-		i =1;
+	GPIO_PinState rotation = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_6);
+	if(rotation == GPIO_PIN_RESET){
+		oldHallSensor = verityTableHoraire();
 	}
-	else {
-		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_RESET);
-		i = 0;
-	}*/
-		verityTableHoraire();
-	//}
-	/*else
+	else
 	{
 		verityTableHoraireAntiHoraire();
-	}*/
+	}
 }
 
 
