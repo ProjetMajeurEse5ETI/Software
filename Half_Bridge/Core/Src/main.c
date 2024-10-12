@@ -23,6 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "C:\Users\anico\Desktop\Ecole\5a\Projet Majeur\Software\Half_Bridge\Core\Sequenceur_Driver/Seq_Half_Bridge.h"
 
 /* USER CODE END Includes */
 
@@ -87,9 +88,9 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  /*HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);*/
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
 
   /* USER CODE END 2 */
 
@@ -142,18 +143,26 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+int i = 0;
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	GPIO_PinState rotation = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_6);
-	if(rotation == GPIO_PIN_SET)
-	{
-		verityTableHoraire();
+	//GPIO_PinState rotation = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_6);
+	//if(rotation == GPIO_PIN_RESET)
+	//{
+	/*if (i == 0) {
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_SET);
+		i =1;
 	}
-	else
+	else {
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_RESET);
+		i = 0;
+	}*/
+		verityTableHoraire();
+	//}
+	/*else
 	{
 		verityTableHoraireAntiHoraire();
-	}
+	}*/
 }
 
 

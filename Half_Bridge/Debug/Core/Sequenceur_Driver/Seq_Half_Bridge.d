@@ -1,5 +1,6 @@
-Core/Src/Low_level_functions.o: ../Core/Src/Low_level_functions.c \
- ../Core/Inc/Low_level_functions.h \
+Core/Sequenceur_Driver/Seq_Half_Bridge.o: \
+ ../Core/Sequenceur_Driver/Seq_Half_Bridge.c \
+ ../Core/Sequenceur_Driver/Seq_Half_Bridge.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h \
  ../Core/Inc/stm32f3xx_hal_conf.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_rcc.h \
@@ -28,8 +29,10 @@ Core/Src/Low_level_functions.o: ../Core/Src/Low_level_functions.c \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_pwr_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h \
- ../Core/Inc/main.h
-../Core/Inc/Low_level_functions.h:
+ ../Core/Inc/main.h \
+ C:\Users\anico\Desktop\Ecole\5a\Projet\ Majeur\Software\Half_Bridge\Core\Inc\Low_level_functions.h \
+ C:\Users\anico\Desktop\Ecole\5a\Projet\ Majeur\Software\Half_Bridge\Core\Inc\main.h
+../Core/Sequenceur_Driver/Seq_Half_Bridge.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:
 ../Core/Inc/stm32f3xx_hal_conf.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_rcc.h:
@@ -59,3 +62,5 @@ Core/Src/Low_level_functions.o: ../Core/Src/Low_level_functions.c \
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h:
 ../Core/Inc/main.h:
+C:\Users\anico\Desktop\Ecole\5a\Projet\ Majeur\Software\Half_Bridge\Core\Inc\Low_level_functions.h:
+C:\Users\anico\Desktop\Ecole\5a\Projet\ Majeur\Software\Half_Bridge\Core\Inc\main.h:

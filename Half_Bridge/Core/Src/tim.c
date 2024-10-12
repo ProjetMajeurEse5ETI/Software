@@ -51,6 +51,7 @@ void modif_DC(uint_32t DC, uint_32 channel)
 */
 /* USER CODE END 0 */
 
+TIM_HandleTypeDef htim2;
 
 /* TIM2 init function */
 void MX_TIM2_Init(void)
@@ -114,8 +115,6 @@ void MX_TIM2_Init(void)
   HAL_TIM_MspPostInit(&htim2);
 
 }
-
-
 
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
 {

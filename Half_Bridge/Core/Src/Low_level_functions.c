@@ -39,5 +39,8 @@ switch (stator_num){
 	default :
 		
 		break;
+}
+
+return;
 
 };

@@ -42,8 +42,6 @@ void MX_TIM2_Init(void);
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
-void modif_DC(uint32_t DC, uint32_t channel);
-
 /* USER CODE BEGIN Prototypes */
 
 /* USER CODE END Prototypes */
