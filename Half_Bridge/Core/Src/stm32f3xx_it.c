@@ -55,7 +55,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-
+extern SPI_HandleTypeDef hspi2;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -206,7 +206,7 @@ void EXTI0_IRQHandler(void)
   /* USER CODE BEGIN EXTI0_IRQn 0 */
 
   /* USER CODE END EXTI0_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(in_Hall_1_EXTI_Pin);
+  HAL_GPIO_EXTI_IRQHandler(in_Hall_1_EXTI_R1_Pin);
   /* USER CODE BEGIN EXTI0_IRQn 1 */
 
   /* USER CODE END EXTI0_IRQn 1 */
@@ -220,24 +220,24 @@ void EXTI1_IRQHandler(void)
   /* USER CODE BEGIN EXTI1_IRQn 0 */
 
   /* USER CODE END EXTI1_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(in_Hall_2_EXTI_Pin);
+  HAL_GPIO_EXTI_IRQHandler(in_Hall_2_EXTI_R1_Pin);
   /* USER CODE BEGIN EXTI1_IRQn 1 */
 
   /* USER CODE END EXTI1_IRQn 1 */
 }
 
 /**
-  * @brief This function handles EXTI line2 and Touch Sense controller.
+  * @brief This function handles SPI2 global interrupt.
   */
-void EXTI2_TSC_IRQHandler(void)
+void SPI2_IRQHandler(void)
 {
-  /* USER CODE BEGIN EXTI2_TSC_IRQn 0 */
+  /* USER CODE BEGIN SPI2_IRQn 0 */
 
-  /* USER CODE END EXTI2_TSC_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(in_Hall_3_EXTI_Pin);
-  /* USER CODE BEGIN EXTI2_TSC_IRQn 1 */
+  /* USER CODE END SPI2_IRQn 0 */
+  HAL_SPI_IRQHandler(&hspi2);
+  /* USER CODE BEGIN SPI2_IRQn 1 */
 
-  /* USER CODE END EXTI2_TSC_IRQn 1 */
+  /* USER CODE END SPI2_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

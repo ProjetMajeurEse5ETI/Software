@@ -18,12 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
 #include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "C:\Users\anico\Desktop\Ecole\5a\Projet Majeur\Software\Half_Bridge\Core\Sequenceur_Driver/Seq_Half_Bridge.h"
+#include "../Sequenceur_Driver/SequencerWheel.h"
 
 /* USER CODE END Includes */
 
@@ -45,7 +46,26 @@
 
 /* USER CODE BEGIN PV */
 //Initalize Hall sensor for verityTable
-int oldHallSensor = 7;
+uint16_t oldHallSensor_R1 = 0x0007;
+uint16_t oldHallSensor_R2 = 0x0028;
+uint16_t hallSensor_R1 = 0;
+uint16_t hallSensor_R2 = 0;
+uint8_t rotation_R1 = 1;
+uint8_t rotation_R2 = 1;
+uint8_t DC_R1 = 0;
+uint8_t DC_R2 = 0;
+uint32_t speed_R1 = 24;
+uint32_t speed_R2 = 24;
+uint16_t tick_R1 = 0;
+uint16_t tick_R2 = 0;
+uint8_t bstop = 0;
+uint8_t counter = 0;
+uint8_t pData[3];
+uint16_t size = 3;
+uint8_t res0 = 0;
+uint8_t res1 = 0;
+uint8_t res2 = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -88,10 +108,16 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM2_Init();
+  MX_TIM4_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
+  HAL_SPI_Receive_IT(&hspi2, pData,size);
 
   /* USER CODE END 2 */
 
@@ -99,6 +125,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	/*if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_1) == GPIO_PIN_SET){
+		bstop = 1;
+	}
+	if (tick_R1 >= 63000 || tick_R2 >= 63000){
+		bstop = 1;
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
+
+	}*/
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -144,19 +179,73 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+/* Fonction mise en mvt robot
+ *
+ *
+ *
+*/
+
+void modif_DC(void)
+{
+ /* The duty cycle value is a percentage of the reload register value (ARR). Rounding is used.*/
+	//speed_R1 = (uint32_t)roundf((float)(htim2.Instance->ARR) * (DC_R1 / 100));
+	//speed_R2 = (uint32_t)roundf((float)(htim4.Instance->ARR) * (DC_R2 / 100));
+
+ /*In case of the DC being calculated as higher than the reload register, cap it to the reload register*/
+ if(speed_R1 > htim2.Instance->ARR)
+ {
+	 speed_R1 = htim2.Instance->ARR;
+ }
+ if(speed_R2> htim4.Instance->ARR)
+ {
+	 speed_R2 = htim4.Instance->ARR;
+ }
+
+}
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	GPIO_PinState rotation = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_6);
-	if(rotation == GPIO_PIN_RESET){
-		oldHallSensor = verityTableHoraire();
-	}
-	else
-	{
-		verityTableHoraireAntiHoraire();
+	if (bstop == 0){
+		hallSensor_R1 = GPIOD->IDR & 0x0007;
+		hallSensor_R2 = GPIOD->IDR & 0x0028;
+		if (oldHallSensor_R1 != hallSensor_R1) {
+			tick_R1++;
+			if (rotation_R1 == 1) {
+				oldHallSensor_R1 = verityTableHoraire_R1(oldHallSensor_R1,hallSensor_R1,speed_R1);
+			}
+			else {
+				verityTableHoraireAntiHoraire_R1(oldHallSensor_R1,hallSensor_R1,speed_R1);
+			}
+		}
+		if (oldHallSensor_R2 != hallSensor_R2){
+			tick_R2++;
+			if (rotation_R2 == 1) {
+				oldHallSensor_R2 = verityTableHoraire_R2(oldHallSensor_R2,hallSensor_R2,speed_R2);
+			}
+			else {
+				verityTableHoraireAntiHoraire_R1(oldHallSensor_R2,hallSensor_R2,speed_R2);
+			}
+		}
 	}
 }
 
 
+/* Fonction réception/envoi SPI
+ *
+ *
+ *
+*/
+
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi){
+	counter ++;
+	if (hspi ->Instance == SPI2){
+		res0 = pData[0];
+		res1 = pData[1];
+		res2 = pData[2];
+		HAL_SPI_Receive_IT(&hspi2, pData,size);
+	}
+
+}
 /* USER CODE END 4 */
 
 /**

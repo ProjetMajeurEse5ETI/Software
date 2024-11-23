@@ -5,13 +5,13 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Core/Sequenceur_Driver/Seq_Half_Bridge.c 
+../Core/Sequenceur_Driver/SequencerWheel.c 
 
 OBJS += \
-./Core/Sequenceur_Driver/Seq_Half_Bridge.o 
+./Core/Sequenceur_Driver/SequencerWheel.o 
 
 C_DEPS += \
-./Core/Sequenceur_Driver/Seq_Half_Bridge.d 
+./Core/Sequenceur_Driver/SequencerWheel.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -21,7 +21,7 @@ Core/Sequenceur_Driver/%.o Core/Sequenceur_Driver/%.su Core/Sequenceur_Driver/%.
 clean: clean-Core-2f-Sequenceur_Driver
 
 clean-Core-2f-Sequenceur_Driver:
-	-$(RM) ./Core/Sequenceur_Driver/Seq_Half_Bridge.cyclo ./Core/Sequenceur_Driver/Seq_Half_Bridge.d ./Core/Sequenceur_Driver/Seq_Half_Bridge.o ./Core/Sequenceur_Driver/Seq_Half_Bridge.su
+	-$(RM) ./Core/Sequenceur_Driver/SequencerWheel.cyclo ./Core/Sequenceur_Driver/SequencerWheel.d ./Core/Sequenceur_Driver/SequencerWheel.o ./Core/Sequenceur_Driver/SequencerWheel.su
 
 .PHONY: clean-Core-2f-Sequenceur_Driver
 

@@ -9,4 +9,4 @@ stm32f3xx_it.c:170:6:PendSV_Handler	1
 stm32f3xx_it.c:183:6:SysTick_Handler	1
 stm32f3xx_it.c:204:6:EXTI0_IRQHandler	1
 stm32f3xx_it.c:218:6:EXTI1_IRQHandler	1
-stm32f3xx_it.c:232:6:EXTI2_TSC_IRQHandler	1
+stm32f3xx_it.c:232:6:SPI2_IRQHandler	1
