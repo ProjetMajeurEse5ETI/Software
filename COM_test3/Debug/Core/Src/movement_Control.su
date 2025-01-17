@@ -1,0 +1,4 @@
+../Core/Src/movement_Control.c:17:6:Locklass	32	static
+../Core/Src/movement_Control.c:59:6:detectionError	16	static
+../Core/Src/movement_Control.c:70:6:set_State	16	static
+../Core/Src/movement_Control.c:75:5:get_State	4	static

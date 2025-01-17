@@ -1,0 +1,6 @@
+../Core/Src/UART_Config.c:65:6:computerFiel	16	static
+../Core/Src/UART_Config.c:109:6:Manual_Instruction	24	static
+../Core/Src/UART_Config.c:129:6:M0_Process	16	static
+../Core/Src/UART_Config.c:159:5:getStatus	16	static
+../Core/Src/UART_Config.c:169:5:getAngle	4	static
+../Core/Src/UART_Config.c:174:6:sendStatus	16	static

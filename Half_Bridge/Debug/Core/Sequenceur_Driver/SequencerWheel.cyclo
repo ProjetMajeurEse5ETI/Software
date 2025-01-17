@@ -1,7 +1,8 @@
-SequencerWheel.c:12:6:resetOutput_R1	1
-SequencerWheel.c:26:6:resetOutput_R2	1
-SequencerWheel.c:35:6:stopAlert	1
-SequencerWheel.c:47:8:verityTableHoraire_R1	19
-SequencerWheel.c:142:8:verityTableHoraireAntiHoraire_R1	21
-SequencerWheel.c:237:8:verityTableHoraire_R2	23
-SequencerWheel.c:332:8:verityTableHoraireAntiHoraire_R2	23
+SequencerWheel.c:9:6:testFunction	1
+SequencerWheel.c:43:6:resetOutput_R1	1
+SequencerWheel.c:57:6:resetOutput_R2	1
+SequencerWheel.c:66:6:stopAlert	1
+SequencerWheel.c:80:6:verityTableHoraire_R1	10
+SequencerWheel.c:170:6:verityTableHoraireAntiHoraire_R1	11
+SequencerWheel.c:264:6:verityTableHoraire_R2	10
+SequencerWheel.c:354:6:verityTableHoraireAntiHoraire_R2	10

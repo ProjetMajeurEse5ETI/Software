@@ -1,7 +1,38 @@
 
 #include "SequencerWheel.h"
+#include "GestionMvt.h"
+#include "C:\Users\Julien\Desktop\Work or others Install\Projet Majeur 2024\Half_Bridge\Core\Inc\Low_level_functions.h"
 
-#include "C:\Users\anico\Desktop\Ecole\5a\Projet Majeur\Software\Half_Bridge\Core\Inc\Low_level_functions.h"
+int counterRamp_R1 = 0;
+int counterRamp_R2 = 0;
+
+void testFunction(int del){
+	HAL_Delay(del);
+	resetOutput_R1();
+	select_GPIO_out_stator(1);
+	select_GPIO_out_stator(2);
+	HAL_Delay(del);
+	resetOutput_R1();
+	select_GPIO_out_stator(1);
+	select_GPIO_out_stator(4);
+	HAL_Delay(del);
+	resetOutput_R1();
+	select_GPIO_out_stator(3);
+	select_GPIO_out_stator(4);
+	HAL_Delay(del);
+	resetOutput_R1();
+	select_GPIO_out_stator(0);
+	select_GPIO_out_stator(3);
+	HAL_Delay(del);
+	resetOutput_R1();
+	select_GPIO_out_stator(0);
+	select_GPIO_out_stator(5);
+	HAL_Delay(del);
+	resetOutput_R1();
+	select_GPIO_out_stator(2);
+	select_GPIO_out_stator(5);
+}
+
 
 
 /**
@@ -10,9 +41,9 @@
   * @retval None
   */
 void resetOutput_R1(void){
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_4, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET);
 	TIM2 -> CCR1 = 0;
 	TIM2 -> CCR2 = 0;
 	TIM2 -> CCR3 = 0;
@@ -24,9 +55,9 @@ void resetOutput_R1(void){
   * @retval None
   */
 void resetOutput_R2(void){
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET);
 	TIM4 -> CCR1 = 0;
 	TIM4 -> CCR2 = 0;
 	TIM4 -> CCR3 = 0;
@@ -43,93 +74,90 @@ void stopAlert(void){
 * If the order is not followed, the BLDC is stop.
 * @param  oldHallSensor is the old value of the Hall Sensor from the n-1 interruption.
 * @retval oldHallSensor with the new value of the Hall Sensor.
+* int8_t oldHallSensor,int8_t hallSensor,uint32_t speed_R1
+* int8_t
 */
-int8_t verityTableHoraire_R1(int8_t oldHallSensor,int8_t hallSensor,uint32_t speed_R1){
-	resetOutput_R1();
-	int success = 1;
+void verityTableHoraire_R1(int8_t hallSensor){
+	if (settings_R1.speed < settings_R1.speedMax) {
+		if (counterRamp_R1 == 100) {
+			settings_R1.speed++;
+			counterRamp_R1 = 0;
+		}
+		else {
+			counterRamp_R1++;
+		}
+	}
+	// Added descending ramp
+	else if(settings_R1.speed > settings_R1.speedMax){
+		settings_R1.speed--;
+	}
 	switch (hallSensor){
 	// Phase 1
 	case 5 :
-		//if (oldHallSensor == 0 || oldHallSensor == 4) {
-			select_GPIO_out_stator(1,speed_R1,0);
-			select_GPIO_out_stator(2,speed_R1,0);
-		/*}else{
-			resetOutput_R1();
-			success = 0;
-		}*/
+			TIM2 -> CCR1 = settings_R1.speed;
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_SET);
+			TIM2 -> CCR3 = 0;
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET);
+			TIM2 -> CCR2 = 0;
 		break;
 
 	// Phase 2
 	case 1 :
-		if (oldHallSensor == 0 || oldHallSensor == 5){
-			select_GPIO_out_stator(1,speed_R1,0);
-			select_GPIO_out_stator(4,speed_R1,0);
-		}else{
-			resetOutput_R1();
-			success = 0;
-		}
+		TIM2 -> CCR1 = settings_R1.speed;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET);
+		TIM2 -> CCR2 = 0;
+		TIM2 -> CCR3 = 0;
 		break;
 
 	// Phase 3
 	case 3 :
-		if (oldHallSensor == 0 ||oldHallSensor == 1){
-			select_GPIO_out_stator(3,speed_R1,0);
-			select_GPIO_out_stator(4,speed_R1,0);
-		}else{
-			resetOutput_R1();
-			success = 0;
-			}
+		TIM2 -> CCR1 = 0;
+		TIM2 -> CCR2 = settings_R1.speed;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
+		TIM2 -> CCR3 = 0;
 		break;
 
 	// Phase 4
 	case 2 :
-		if (oldHallSensor == 0 ||oldHallSensor == 3){
-			select_GPIO_out_stator(0,speed_R1,0);
-			select_GPIO_out_stator(3,speed_R1,0);
-		}else{
-			resetOutput_R1();
-			success = 0;
-			}
+		TIM2 -> CCR2 = settings_R1.speed;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
+		TIM2 -> CCR3 = 0;
+		TIM2 -> CCR1 = 0;
 		break;
 
 	// Phase 5
 	case 6 :
-		if (oldHallSensor == 0 ||oldHallSensor == 2){
-			select_GPIO_out_stator(0,speed_R1,0);
-			select_GPIO_out_stator(5,speed_R1,0);
-		}else{
-			resetOutput_R1();
-			success = 0;
-			}
+		TIM2 -> CCR3 = settings_R1.speed;
+		TIM2 -> CCR2 = 0;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET);
+		TIM2 -> CCR1 = 0;
 		break;
 
 	// Phase 6
 	case 4 :
-		if (oldHallSensor == 0 ||oldHallSensor == 6){
-			select_GPIO_out_stator(2,speed_R1,0);
-			select_GPIO_out_stator(5,speed_R1,0);
-		}else{
-			resetOutput_R1();
-			success = 0;
-			}
+		TIM2 -> CCR3 = settings_R1.speed;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET);
+		TIM2 -> CCR1 = 0;
+		TIM2 -> CCR2 = 0;
 		break;
-	//IDLE
-	case 7 :
-		resetOutput_R1();
-		success = 0;
 	// Default
 	default :
-		resetOutput_R1();
-		success = 0;
+		//resetOutput_R1();
 		break;
 	}
-	if (success) {
-		oldHallSensor = hallSensor;
-	}else{
-		stopAlert();
-		oldHallSensor = 7;
-	}
-	return oldHallSensor;
+
+	return;
 }
 
 
@@ -139,93 +167,92 @@ int8_t verityTableHoraire_R1(int8_t oldHallSensor,int8_t hallSensor,uint32_t spe
   * @param  oldHallSensor is the old value of the Hall Sensor from the n-1 interruption.
   * @retval oldHallSensor with the new value of the Hall Sensor.
   */
-int8_t verityTableHoraireAntiHoraire_R1(int8_t oldHallSensor,int8_t hallSensor,uint32_t speed_R1)
+void verityTableHoraireAntiHoraire_R1(int8_t hallSensor)
 {
-	resetOutput_R1();
-	int success = 1;
+	if (settings_R1.speed < settings_R1.speedMax) {
+		if (counterRamp_R1 == 100) {
+			settings_R1.speed++;
+			counterRamp_R1 = 0;
+		}
+		else {
+			counterRamp_R1++;
+		}
+	}
+	// Added descending ramp
+	else if(settings_R1.speed > settings_R1.speedMax){
+		settings_R1.speed--;
+	}
+	// Added descending ramp
+	else if(settings_R1.speed > settings_R1.speedMax){
+		settings_R1.speed--;
+	}
 	switch (hallSensor){
 	// Phase 1
 	case 5 :
-		if (oldHallSensor == 0 || oldHallSensor == 4) {
-			select_GPIO_out_stator(0,speed_R1,0);
-			select_GPIO_out_stator(3,speed_R1,0);
-		}else{
-			resetOutput_R1();
-			success = 0;
-		}
+			TIM2 -> CCR2 = settings_R1.speed;
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET);
+			TIM2 -> CCR3 = 0;
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
+			TIM2 -> CCR1 = 0;
 		break;
 
-	// Phase 2
+	// Phase 2 - Q1L & Q3H
 	case 1 :
-		if (oldHallSensor == 0 || oldHallSensor == 5){
-			select_GPIO_out_stator(0,speed_R1,0);
-			select_GPIO_out_stator(5,speed_R1,0);
-		}else{
-			resetOutput_R1();
-			success = 0;
-		}
+		TIM2 -> CCR3 = settings_R1.speed;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_SET);
+		TIM2 -> CCR2 = 0;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
+		TIM2 -> CCR1 = 0;
+
 		break;
 
-	// Phase 3
+	// Phase 3 - Q2L & Q3H
 	case 3 :
-		if (oldHallSensor == 0 ||oldHallSensor == 1){
-			select_GPIO_out_stator(2,speed_R1,0);
-			select_GPIO_out_stator(5,speed_R1,0);
-		}else{
-			resetOutput_R1();
-			success = 0;
-		}
+		TIM2 -> CCR3 = settings_R1.speed;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_SET);
+		TIM2 -> CCR1 = 0;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET);
+		TIM2 -> CCR3 = 0;
 		break;
 
-	// Phase 4
+	// Phase 4 - Q1H & Q2L
 	case 2 :
-		if (oldHallSensor == 0 ||oldHallSensor == 3){
-			select_GPIO_out_stator(1,speed_R1,0);
-			select_GPIO_out_stator(2,speed_R1,0);
-		}else{
-			resetOutput_R1();
-			success = 0;
-		}
+		TIM2 -> CCR1 = settings_R1.speed;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET);
+		TIM2 -> CCR3 = 0;
+		TIM2 -> CCR2 = 0;
 		break;
 
-	// Phase 5
+	// Phase 5 - Q1H & Q3L
 	case 6 :
-		if (oldHallSensor == 0 ||oldHallSensor == 3){
-			select_GPIO_out_stator(1,speed_R1,0);
-			select_GPIO_out_stator(4,speed_R1,0);
-		}else{
-			resetOutput_R1();
-			success = 0;
-		}
+		TIM2 -> CCR1 = settings_R1.speed;
+		TIM2 -> CCR2 = 0;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET);
+		TIM2 -> CCR3 = 0;
 		break;
 
-	// Phase 6
+	// Phase 6 - Q2H & Q3L
 	case 4 :
-		if (oldHallSensor == 0 ||oldHallSensor == 6){
-			select_GPIO_out_stator(3,speed_R1,0);
-			select_GPIO_out_stator(4,speed_R1,0);
-		}else{
-			resetOutput_R1();
-			success = 0;
-		}
+		TIM2 -> CCR2 = settings_R1.speed;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET);
+		TIM2 -> CCR3 = 0;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
+		TIM2 -> CCR1 = 0;
 		break;
-	//IDLE
-	case 7 :
-		resetOutput_R1();
-		success = 0;
 	// Default
 	default :
-		resetOutput_R1();
-		success = 0;
+		//resetOutput_R1();
 		break;
 	}
-	if (success) {
-		oldHallSensor = hallSensor;
-	}else{
-		stopAlert();
-		oldHallSensor = 7;
-	}
-	return oldHallSensor;
+	return;
 }
 
 /**
@@ -234,92 +261,87 @@ int8_t verityTableHoraireAntiHoraire_R1(int8_t oldHallSensor,int8_t hallSensor,u
 * @param  oldHallSensor is the old value of the Hall Sensor from the n-1 interruption.
 * @retval oldHallSensor with the new value of the Hall Sensor.
 */
-int8_t verityTableHoraire_R2(int8_t oldHallSensor,int8_t hallSensor,uint32_t speed_R2){
-	resetOutput_R2();
-	int success = 1;
+void verityTableHoraire_R2(int8_t hallSensor){
+	if (settings_R2.speed < settings_R2.speedMax) {
+		if (counterRamp_R2 == 100) {
+			settings_R2.speed++;
+			counterRamp_R2 = 0;
+		}
+		else {
+			counterRamp_R2++;
+		}
+	}
+	// Added descending ramp
+	else if(settings_R2.speed > settings_R2.speedMax){
+		settings_R2.speed--;
+	}
 	switch (hallSensor){
-	// Phase 1
-	case 40 :
-		if (oldHallSensor == 0 || oldHallSensor == 64) {
-			select_GPIO_out_stator(9,0,speed_R2);
-			select_GPIO_out_stator(10,0,speed_R2);
-		}else{
-			resetOutput_R2();
-			success = 0;
+		// Phase 1 - Q1H & Q2L
+		case 0x28 :
+				TIM4 -> CCR1 = settings_R2.speed;
+				HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET);
+				TIM4 -> CCR3 = 0;
+				HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET);
+				TIM4 -> CCR2 = 0;
+			break;
+
+		// Phase 2 - Q1H & Q3L
+		case 0x08 :
+			TIM4 -> CCR1 = settings_R2.speed;
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET);
+			TIM4 -> CCR2 = 0;
+			TIM4 -> CCR3 = 0;
+			break;
+
+		// Phase 3 - Q2H & Q3L
+		case 0x18 :
+			TIM4 -> CCR1 = 0;
+			TIM4 -> CCR2 = settings_R2.speed;
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
+			TIM4 -> CCR3 = 0;
+			break;
+
+		// Phase 4 - Q1L & Q2H
+		case 0x10 :
+			TIM4 -> CCR2 = settings_R2.speed;
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
+			TIM4 -> CCR3 = 0;
+			TIM4 -> CCR1 = 0;
+			break;
+
+		// Phase 5 - Q1L & Q3H
+		case 0x30 :
+			TIM4 -> CCR3 = settings_R2.speed;
+			TIM4 -> CCR2 = 0;
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET);
+			TIM4 -> CCR1 = 0;
+			break;
+
+		// Phase 6 - Q2L & Q3H
+		case 0x20 :
+			TIM4 -> CCR3 = settings_R2.speed;
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET);
+			TIM4 -> CCR1 = 0;
+			TIM4 -> CCR2 = 0;
+			break;
+		// Default
+		default :
+			//resetOutput_R1();
+			break;
 		}
-		break;
-
-	// Phase 2
-	case 8 :
-		if (oldHallSensor == 0 || oldHallSensor == 40){
-			select_GPIO_out_stator(7,0,speed_R2);
-			select_GPIO_out_stator(10,0,speed_R2);
-		}else{
-			resetOutput_R2();
-			success = 0;
-		}
-		break;
-
-	// Phase 3
-	case 24 :
-		if (oldHallSensor == 0 ||oldHallSensor == 8){
-			select_GPIO_out_stator(9,0,speed_R2);
-			select_GPIO_out_stator(10,0,speed_R2);
-		}else{
-			resetOutput_R2();
-			success = 0;
-			}
-		break;
-
-	// Phase 4
-	case 16 :
-		if (oldHallSensor == 0 ||oldHallSensor == 24){
-			select_GPIO_out_stator(6,0,speed_R2);
-			select_GPIO_out_stator(9,0,speed_R2);
-		}else{
-			resetOutput_R2();
-			success = 0;
-			}
-		break;
-
-	// Phase 5
-	case 48 :
-		if (oldHallSensor == 0 ||oldHallSensor == 16){
-			select_GPIO_out_stator(6,0,speed_R2);
-			select_GPIO_out_stator(11,0,speed_R2);
-		}else{
-			resetOutput_R2();
-			success = 0;
-			}
-		break;
-
-	// Phase 6
-	case 64 :
-		if (oldHallSensor == 0 ||oldHallSensor == 48){
-			select_GPIO_out_stator(8,0,speed_R2);
-			select_GPIO_out_stator(11,0,speed_R2);
-		}else{
-			resetOutput_R2();
-			success = 0;
-			}
-		break;
-	//IDLE
-	case 7 :
-		resetOutput_R2();
-		success = 0;
-	// Default
-	default :
-		resetOutput_R2();
-		success = 0;
-		break;
-	}
-	if (success) {
-		oldHallSensor = hallSensor;
-	}else{
-		stopAlert();
-		oldHallSensor = 7;
-	}
-	return oldHallSensor;
+	settings_R2.oldHallSensor = hallSensor;
+	return;
 }
 
 
@@ -329,91 +351,86 @@ int8_t verityTableHoraire_R2(int8_t oldHallSensor,int8_t hallSensor,uint32_t spe
   * @param  oldHallSensor is the old value of the Hall Sensor from the n-1 interruption.
   * @retval oldHallSensor with the new value of the Hall Sensor.
   */
-int8_t verityTableHoraireAntiHoraire_R2(int8_t oldHallSensor,int8_t hallSensor,uint32_t speed_R2)
+void verityTableHoraireAntiHoraire_R2(int8_t hallSensor)
 {
-	resetOutput_R2();
-	int success = 1;
+	if (settings_R2.speed < settings_R2.speedMax) {
+		if (counterRamp_R2 == 100) {
+			settings_R2.speed++;
+			counterRamp_R2 = 0;
+		}
+		else {
+			counterRamp_R2++;
+		}
+	}
+	// Added descending ramp
+	else if(settings_R2.speed > settings_R2.speedMax){
+		settings_R2.speed--;
+	}
 	switch (hallSensor){
-	// Phase 1
-	case 40 :
-			if (oldHallSensor == 0 || oldHallSensor == 64) {
-			select_GPIO_out_stator(6,0,speed_R2);
-			select_GPIO_out_stator(9,0,speed_R2);
-		}else{
-			resetOutput_R2();
-			success = 0;
-		}
+	// Phase 1 - Q1L & Q2H
+	case 0b101000 :
+			TIM4 -> CCR2 = settings_R2.speed;
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET);
+			TIM4 -> CCR3 = 0;
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
+			TIM4 -> CCR1 = 0;
 		break;
 
-	// Phase 2
-	case 8 :
-		if (oldHallSensor == 0 || oldHallSensor == 40){
-			select_GPIO_out_stator(9,0,speed_R2);
-			select_GPIO_out_stator(11,0,speed_R2);
-		}else{
-			resetOutput_R2();
-			success = 0;
-		}
+	// Phase 2 - Q1L & Q3H
+	case 0b001000 :
+		TIM4 -> CCR3 = settings_R2.speed;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_SET);
+		TIM4 -> CCR2 = 0;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
+		TIM4 -> CCR1 = 0;
+
 		break;
 
-	// Phase 3
-	case 24 :
-		if (oldHallSensor == 0 ||oldHallSensor == 8){
-			select_GPIO_out_stator(8,0,speed_R2);
-			select_GPIO_out_stator(11,0,speed_R2);
-		}else{
-			resetOutput_R2();
-			success = 0;
-		}
+	// Phase 3 - Q2L & Q3H
+	case 0b011000 :
+		TIM4 -> CCR3 = settings_R2.speed;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET);
+		TIM4 -> CCR1 = 0;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET);
+		TIM4 -> CCR3 = 0;
 		break;
 
-	// Phase 4
-	case 16 :
-		if (oldHallSensor == 0 ||oldHallSensor == 24){
-			select_GPIO_out_stator(7,0,speed_R2);
-			select_GPIO_out_stator(8,0,speed_R2);
-		}else{
-			resetOutput_R2();
-			success = 0;
-		}
+	// Phase 4 - Q1H & Q2L
+	case 0b010000 :
+		TIM4 -> CCR1 = settings_R2.speed;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET);
+		TIM4 -> CCR3 = 0;
+		TIM4 -> CCR2 = 0;
 		break;
 
-	// Phase 5
-	case 48 :
-		if (oldHallSensor == 0 ||oldHallSensor == 16){
-			select_GPIO_out_stator(7,0,speed_R2);
-			select_GPIO_out_stator(10,0,speed_R2);
-		}else{
-			resetOutput_R2();
-			success = 0;
-		}
+	// Phase 5 - Q1H & Q3L
+	case 0b110000 :
+		TIM4 -> CCR1 = settings_R2.speed;
+		TIM4 -> CCR2 = 0;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET);
+		TIM4 -> CCR3 = 0;
 		break;
 
-	// Phase 6
-	case 64 :
-		if (oldHallSensor == 0 ||oldHallSensor == 48){
-			select_GPIO_out_stator(9,0,speed_R2);
-			select_GPIO_out_stator(10,0,speed_R2);
-		}else{
-			resetOutput_R2();
-			success = 0;
-		}
+	// Phase 6 - Q2H & Q3L
+	case 0b100000 :
+		TIM4 -> CCR2 = settings_R2.speed;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET);
+		TIM4 -> CCR3 = 0;
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
+		TIM4 -> CCR1 = 0;
 		break;
-	//IDLE
-	case 7 :
-		resetOutput_R2();
-		success = 0;
 	// Default
 	default :
-		resetOutput_R2();
-		success = 0;
+		//resetOutput_R1();
 		break;
 	}
-	if (success) {
-		oldHallSensor = hallSensor;
-	}else{
-		stopAlert();
-		oldHallSensor = 7;
-	}
-	return oldHallSensor;
+	return;
 }

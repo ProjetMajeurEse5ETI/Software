@@ -1,0 +1,3 @@
+../Core/Src/GestionMvt.c:40:6:stopRobot	8	static
+../Core/Src/GestionMvt.c:50:7:startRobot	8	static
+../Core/Src/GestionMvt.c:73:6:variableModification	24	static

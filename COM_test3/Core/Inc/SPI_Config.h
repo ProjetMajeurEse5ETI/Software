@@ -12,20 +12,20 @@
 extern "C" {
 #endif
 
-#include "stm32f3xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 #define no_Data 0x00
 #define SFD_Val 0x5
 #define wheel_A 0x1
 #define wheel_B 0x0
+#define stop_Bot  0x1
+#define start_Bot 0x0
 
 typedef enum
 {
-	state           = 0x1,
-	PWM_config      = 0x2,
-	acknowledge_A   = 0x3,
-	acknowledge_B   = 0x4,
-	PWM_status      = 0x5
+	setting         	= 0x1,
+	Start_Stop      	= 0x2,
+	acknowledge_tick	= 0x3
 }SPI_CMD_Byte;
 
 typedef struct
@@ -54,10 +54,10 @@ typedef union uint8_t
 	SPI_CMD_B B;
 }CMD_Frame;
 
-
 void getTickSlave(SPI_HandleTypeDef *hspi, uint8_t wheel);
 void send_SPI_message(SPI_HandleTypeDef *hspi, SPI_CMD_Byte cmd, uint16_t data);
-void SPI_data_processing(uint8_t *RXdata);
+int VARgetTickSlave(SPI_HandleTypeDef *hspi, uint8_t wheel);
+void ChangeDirection(SPI_HandleTypeDef *hspi, uint16_t speed_WA, uint16_t speed_WB, uint16_t rot_WA, uint16_t rot_WB);
 #ifdef __cplusplus
 }
 #endif

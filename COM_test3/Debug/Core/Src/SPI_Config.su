@@ -1,0 +1,4 @@
+../Core/Src/SPI_Config.c:28:6:send_SPI_message	24	static
+../Core/Src/SPI_Config.c:52:6:getTickSlave	24	static
+../Core/Src/SPI_Config.c:90:5:VARgetTickSlave	24	static
+../Core/Src/SPI_Config.c:119:6:ChangeDirection	32	static

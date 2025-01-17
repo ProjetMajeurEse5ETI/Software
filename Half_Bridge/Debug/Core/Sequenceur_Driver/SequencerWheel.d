@@ -31,9 +31,9 @@ Core/Sequenceur_Driver/SequencerWheel.o: \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h \
- ../Core/Inc/main.h \
- C:\Users\anico\Desktop\Ecole\5a\Projet\ Majeur\Software\Half_Bridge\Core\Inc\Low_level_functions.h \
- C:\Users\anico\Desktop\Ecole\5a\Projet\ Majeur\Software\Half_Bridge\Core\Inc\main.h
+ ../Core/Inc/main.h ../Core/Inc/GestionMvt.h \
+ C:\Users\Julien\Desktop\Work\ or\ others\ Install\Projet\ Majeur\ 2024\Half_Bridge\Core\Inc\Low_level_functions.h \
+ C:\Users\Julien\Desktop\Work\ or\ others\ Install\Projet\ Majeur\ 2024\Half_Bridge\Core\Inc\main.h
 ../Core/Sequenceur_Driver/SequencerWheel.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:
 ../Core/Inc/stm32f3xx_hal_conf.h:
@@ -66,5 +66,6 @@ Core/Sequenceur_Driver/SequencerWheel.o: \
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h:
 ../Core/Inc/main.h:
-C:\Users\anico\Desktop\Ecole\5a\Projet\ Majeur\Software\Half_Bridge\Core\Inc\Low_level_functions.h:
-C:\Users\anico\Desktop\Ecole\5a\Projet\ Majeur\Software\Half_Bridge\Core\Inc\main.h:
+../Core/Inc/GestionMvt.h:
+C:\Users\Julien\Desktop\Work\ or\ others\ Install\Projet\ Majeur\ 2024\Half_Bridge\Core\Inc\Low_level_functions.h:
+C:\Users\Julien\Desktop\Work\ or\ others\ Install\Projet\ Majeur\ 2024\Half_Bridge\Core\Inc\main.h:

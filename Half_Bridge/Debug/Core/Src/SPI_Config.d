@@ -1,4 +1,4 @@
-Core/Src/SPI_Config.o: ../Core/Src/SPI_Config.c ../Core/Src/SPI_Config.h \
+Core/Src/SPI_Config.o: ../Core/Src/SPI_Config.c ../Core/Inc/SPI_Config.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h \
  ../Core/Inc/stm32f3xx_hal_conf.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_rcc.h \
@@ -28,8 +28,9 @@ Core/Src/SPI_Config.o: ../Core/Src/SPI_Config.c ../Core/Src/SPI_Config.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h \
- ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h
-../Core/Src/SPI_Config.h:
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h \
+ ../Core/Inc/GestionMvt.h ../Core/Inc/main.h
+../Core/Inc/SPI_Config.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:
 ../Core/Inc/stm32f3xx_hal_conf.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_rcc.h:
@@ -60,3 +61,5 @@ Core/Src/SPI_Config.o: ../Core/Src/SPI_Config.c ../Core/Src/SPI_Config.h \
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi_ex.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h:
+../Core/Inc/GestionMvt.h:
+../Core/Inc/main.h:

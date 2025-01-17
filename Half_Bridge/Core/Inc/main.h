@@ -75,8 +75,6 @@ void Error_Handler(void);
 #define B1_GPIO_Port GPIOA
 #define Q2H_R1_Pin GPIO_PIN_1
 #define Q2H_R1_GPIO_Port GPIOA
-#define Q3H_R1_Pin GPIO_PIN_2
-#define Q3H_R1_GPIO_Port GPIOA
 #define SPI1_SCK_Pin GPIO_PIN_5
 #define SPI1_SCK_GPIO_Port GPIOA
 #define SPI1_MISO_Pin GPIO_PIN_6
@@ -87,8 +85,6 @@ void Error_Handler(void);
 #define LD4_GPIO_Port GPIOE
 #define LD3_Pin GPIO_PIN_9
 #define LD3_GPIO_Port GPIOE
-#define LD5_Pin GPIO_PIN_10
-#define LD5_GPIO_Port GPIOE
 #define LD7_Pin GPIO_PIN_11
 #define LD7_GPIO_Port GPIOE
 #define LD9_Pin GPIO_PIN_12
@@ -99,6 +95,8 @@ void Error_Handler(void);
 #define LD8_GPIO_Port GPIOE
 #define LD6_Pin GPIO_PIN_15
 #define LD6_GPIO_Port GPIOE
+#define Q3H_R1_Pin GPIO_PIN_10
+#define Q3H_R1_GPIO_Port GPIOB
 #define Q3L_R1_Pin GPIO_PIN_8
 #define Q3L_R1_GPIO_Port GPIOD
 #define Q1L_R2_Pin GPIO_PIN_9
@@ -123,32 +121,17 @@ void Error_Handler(void);
 #define SWCLK_GPIO_Port GPIOA
 #define Q1H_R1_Pin GPIO_PIN_15
 #define Q1H_R1_GPIO_Port GPIOA
-#define in_Hall_1_EXTI_R1_Pin GPIO_PIN_0
-#define in_Hall_1_EXTI_R1_GPIO_Port GPIOD
-#define in_Hall_1_EXTI_R1_EXTI_IRQn EXTI0_IRQn
-#define in_Hall_2_EXTI_R1_Pin GPIO_PIN_1
-#define in_Hall_2_EXTI_R1_GPIO_Port GPIOD
-#define in_Hall_2_EXTI_R1_EXTI_IRQn EXTI1_IRQn
-#define in_Hall_3_EXTI_R1_Pin GPIO_PIN_2
-#define in_Hall_3_EXTI_R1_GPIO_Port GPIOD
-#define in_Hall_1_EXTI_R2_Pin GPIO_PIN_3
-#define in_Hall_1_EXTI_R2_GPIO_Port GPIOD
-#define in_Hall_2_EXTI_R2_Pin GPIO_PIN_4
-#define in_Hall_2_EXTI_R2_GPIO_Port GPIOD
-#define in_Hall_2_EXTI_R2D5_Pin GPIO_PIN_5
-#define in_Hall_2_EXTI_R2D5_GPIO_Port GPIOD
 #define Q1L_R1_Pin GPIO_PIN_6
 #define Q1L_R1_GPIO_Port GPIOD
 #define Q2L_R1_Pin GPIO_PIN_7
 #define Q2L_R1_GPIO_Port GPIOD
-#define SWO_Pin GPIO_PIN_3
-#define SWO_GPIO_Port GPIOB
 #define I2C1_SCL_Pin GPIO_PIN_6
 #define I2C1_SCL_GPIO_Port GPIOB
 #define I2C1_SDA_Pin GPIO_PIN_7
 #define I2C1_SDA_GPIO_Port GPIOB
-/* USER CODE BEGIN Private defines */
 
+/* USER CODE BEGIN Private defines */
+void modif_DC(void);
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

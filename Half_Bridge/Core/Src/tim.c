@@ -215,17 +215,25 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
 
   /* USER CODE END TIM2_MspPostInit 0 */
     __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOB_CLK_ENABLE();
     /**TIM2 GPIO Configuration
     PA1     ------> TIM2_CH2
-    PA2     ------> TIM2_CH3
+    PB10     ------> TIM2_CH3
     PA15     ------> TIM2_CH1
     */
-    GPIO_InitStruct.Pin = Q2H_R1_Pin|Q3H_R1_Pin|Q1H_R1_Pin;
+    GPIO_InitStruct.Pin = Q2H_R1_Pin|Q1H_R1_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     GPIO_InitStruct.Alternate = GPIO_AF1_TIM2;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = Q3H_R1_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF1_TIM2;
+    HAL_GPIO_Init(Q3H_R1_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN TIM2_MspPostInit 1 */
 

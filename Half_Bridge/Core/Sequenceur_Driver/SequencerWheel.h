@@ -11,6 +11,8 @@
 #include "stm32f3xx_hal.h"
 #include "main.h"
 
+
+void testFunction(int del);
 /**
   * @brief  Clear the ouput to control the H bridge for the BLDC.
   * @param  None
@@ -37,7 +39,7 @@ void stopAlert(void);
   * @param  oldHallSensor is the old value of the Hall Sensor from the n-1 interruption.
   * @retval oldHallSensor with the new value of the Hall Sensor.
   */
-int8_t verityTableHoraire_R1(int8_t oldHallSensor,int8_t hallSensor,uint32_t speed_R1);
+void verityTableHoraire_R1(int8_t hallSensor);
 
 /**
   * @brief  To run in anti-horaire sense the selected BLDC following the pahse order.
@@ -45,7 +47,7 @@ int8_t verityTableHoraire_R1(int8_t oldHallSensor,int8_t hallSensor,uint32_t spe
   * @param  oldHallSensor is the old value of the Hall Sensor from the n-1 interruption.
   * @retval oldHallSensor with the new value of the Hall Sensor.
   */
-int8_t verityTableHoraireAntiHoraire_R1(int8_t oldHallSensor,int8_t hallSensor,uint32_t speed_R1);
+void verityTableHoraireAntiHoraire_R1(int8_t hallSensor);
 
 /**
   * @brief  To run in horaire sense the selected BLDC following the pahse order.
@@ -53,7 +55,7 @@ int8_t verityTableHoraireAntiHoraire_R1(int8_t oldHallSensor,int8_t hallSensor,u
   * @param  oldHallSensor is the old value of the Hall Sensor from the n-1 interruption.
   * @retval oldHallSensor with the new value of the Hall Sensor.
   */
-int8_t verityTableHoraire_R2(int8_t oldHallSensor,int8_t hallSensor,uint32_t speed_R2);
+void verityTableHoraire_R2(int8_t hallSensor);
 
 /**
   * @brief  To run in anti-horaire sense the selected BLDC following the pahse order.
@@ -61,7 +63,7 @@ int8_t verityTableHoraire_R2(int8_t oldHallSensor,int8_t hallSensor,uint32_t spe
   * @param  oldHallSensor is the old value of the Hall Sensor from the n-1 interruption.
   * @retval oldHallSensor with the new value of the Hall Sensor.
   */
-int8_t verityTableHoraireAntiHoraire_R2(int8_t oldHallSensor,int8_t hallSensor,uint32_t speed_R2);
+void verityTableHoraireAntiHoraire_R2(int8_t hallSensor);
 
 
 
